@@ -5,15 +5,22 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/akumar261089/curd-go-mongo/mongoConnect/handlers"
-	"github.com/akumar261089/curd-go-mongo/mongoConnect/mongoConnect"
+	"github.com/akumar261089/curd-go-mongo/handlers"
+	"github.com/akumar261089/curd-go-mongo/mongoConnect"
 	"gopkg.in/mgo.v2/bson"
 )
 
 func main() {
-	mongoConnect.Connect()
 
-	cursor, err := handlers.Collection.Find(context.TODO(), bson.M{})
+	dbDetails := map[string][]string{
+		"quickstart": {"jhfhgfhgfhg", "QuickstartDatabase", "spjhbjhgvjh"},
+		"seconddb":   {"firstcoll", "second"},
+	}
+
+	mongoConnect.Connect(dbDetails)
+	fmt.Println(handlers.Collection2)
+	cursor, err := handlers.Collection2["quickstart"]["QuickstartDatabase"].Find(context.TODO(), bson.M{})
+	//cursor, err := handlers.Collection[1].Find(context.TODO(), bson.M{})
 	if err != nil {
 		log.Fatal(err)
 	}

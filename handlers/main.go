@@ -1,9 +1,44 @@
 package handlers
 
-import "go.mongodb.org/mongo-driver/mongo"
+import (
+	"fmt"
 
-var Collection *mongo.Collection
+	"github.com/akumar261089/curd-go-mongo/models"
+	"go.mongodb.org/mongo-driver/mongo"
+)
 
-func GetCollection(c *mongo.Database) {
-	Collection = c.Collection("QuickstartDatabase")
+var Collection []*mongo.Collection
+var Collection2 = map[string]map[string]*mongo.Collection{}
+
+func GetCollection(databaseexport []models.DbAddrCollectionList) {
+
+	for _, db := range databaseexport {
+		fmt.Println(db.DbName)
+		Collection2[db.DbName] = map[string]*mongo.Collection{}
+
+		for _, collectionName := range db.CollectionList {
+			//Collection = append(Collection, c.Collection(collectionName))
+			//colAdd := c.Collection(collectionName)
+			//fmt.Println(colAdd)
+			colmap := map[string]*mongo.Collection{
+				collectionName: db.DbAddr.Collection(collectionName),
+			}
+			//fmt.Println(colmap)
+			for key, val := range colmap {
+				Collection2[db.DbName][key] = val
+			}
+		}
+	}
+
+	//fmt.Println(Collection[1])
+	//Collection2["test"]["test"] = Collection[1]
+
+	//fmt.Println(Collection2)
 }
+
+// func GetCollection(c *mongo.Database, col []string) {
+
+// 	for _, collectionName := range col {
+// 		Collection = append(Collection, c.Collection(collectionName))
+// 	}
+// }
