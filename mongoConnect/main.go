@@ -5,11 +5,14 @@ import (
 	"log"
 	"time"
 
+	"github.com/akumar261089/curd-go-mongo/mongoConnect/handlers"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var MongoClient = *mongo.Client
+var MongoClient *mongo.Client
+var MongoCollection *mongo.Collection
+var Database *mongo.Database
 
 func Connect() {
 
@@ -24,5 +27,7 @@ func Connect() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	Database := MongoClient.Database("quickstart")
+	handlers.GetCollection(Database)
+	return
 }
