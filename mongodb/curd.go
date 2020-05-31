@@ -1,16 +1,15 @@
-package handlers
+package mongodb
 
 import (
 	"fmt"
 
-	"github.com/akumar261089/curd-go-mongo/models"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 var Collection []*mongo.Collection
 var Collection2 = map[string]map[string]*mongo.Collection{}
 
-func GetCollection(databaseexport []models.DbAddrCollectionList) {
+func GetCollection(databaseexport []DbAddrCollectionList) {
 
 	for _, db := range databaseexport {
 		fmt.Println(db.DbName)

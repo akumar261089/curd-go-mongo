@@ -1,16 +1,15 @@
-package mongoConnect
+package mongodb
 
 import (
 	"context"
 	"log"
 	"time"
 
-	"github.com/akumar261089/curd-go-mongo/handlers"
-	"github.com/akumar261089/curd-go-mongo/models"
-
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+var MongoClient *mongo.Client
 
 func Connect(dbDetails map[string][]string) {
 
@@ -26,7 +25,7 @@ func Connect(dbDetails map[string][]string) {
 		log.Fatal(err)
 	}
 	// var databasedetails map[string]map[string][]
-	databaseexport := make([]models.DbAddrCollectionList, len(dbDetails))
+	databaseexport := make([]DbAddrCollectionList, len(dbDetails))
 	i := 0
 	for dbname, cols := range dbDetails {
 		// fmt.Println(dbname, cols)
@@ -41,7 +40,7 @@ func Connect(dbDetails map[string][]string) {
 		i++
 	}
 
-	handlers.GetCollection(databaseexport)
+	GetCollection(databaseexport)
 	// Database := MongoClient.Database(dbname)
 	// var cols []string
 	// cols = append(cols, "QuickstartDatabase")

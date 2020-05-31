@@ -1,13 +1,14 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
+	"net/http"
+	"os"
 
-	"github.com/akumar261089/curd-go-mongo/handlers"
-	"github.com/akumar261089/curd-go-mongo/mongoConnect"
-	"gopkg.in/mgo.v2/bson"
+	"github.com/akumar261089/curd-go-mongo/mongodb"
+	"github.com/akumar261089/curd-go-mongo/restapi"
+	"github.com/gorilla/handlers"
 )
 
 func main() {
@@ -16,17 +17,15 @@ func main() {
 		"quickstart": {"jhfhgfhgfhg", "QuickstartDatabase", "spjhbjhgvjh"},
 		"seconddb":   {"firstcoll", "second"},
 	}
+	mongodb.Connect(dbDetails)
+	fmt.Println("DB connected")
 
-	mongoConnect.Connect(dbDetails)
-	fmt.Println(handlers.Collection2)
-	cursor, err := handlers.Collection2["quickstart"]["QuickstartDatabase"].Find(context.TODO(), bson.M{})
-	//cursor, err := handlers.Collection[1].Find(context.TODO(), bson.M{})
-	if err != nil {
-		log.Fatal(err)
-	}
-	var episodes []bson.M
-	if err = cursor.All(context.TODO(), &episodes); err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(episodes)
+	router := restapi.NewRouter()
+
+	// Route Handlers / Endpoints
+
+	// log.Fatal(http.ListenAndServe(":8080", router))
+	loggedRouter := handlers.LoggingHandler(os.Stdout, router)
+	log.Fatal(http.ListenAndServe(":8080", loggedRouter))
+
 }
